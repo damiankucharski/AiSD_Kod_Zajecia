@@ -18,12 +18,12 @@ class InteractiveArray:
         if xticks is not None:
             self.xticks = xticks
         else:
-            self.xticks = np.arange(arr.shape[0])
+            self.xticks = None
         if len(arr.shape) > 1:
             if yticks is not None:
                 self.yticks = yticks
             else:
-                self.yticks = np.arange(arr.shape[1])
+                self.yticks = None
 
     def sum(self, axis=None):
         return InteractiveArray(np.sum(self.arr, axis=axis))
@@ -81,8 +81,9 @@ class InteractiveArray:
             fig, self.ax = plt.subplots()
             self.ax.matshow(self.arr[np.newaxis, :], cmap="coolwarm", aspect="auto")
             self.ax.set_yticklabels([])
-            self.ax.set_xticks(np.arange(len(self.arr)))
-            self.ax.set_xticklabels(self.xticks)
+            if self.xticks:
+                self.ax.set_xticks(np.arange(len(self.arr)))
+                self.ax.set_xticklabels(self.xticks)
             self.ax.set_yticks([])
             for i, v in enumerate(self.arr):
                 self.ax.text(i, 0, str(v), va="center", ha="center")
@@ -93,11 +94,15 @@ class InteractiveArray:
                 for j in range(self.arr.shape[1]):
                     self.ax.text(j, i, str(self.arr[i, j]), va="center", ha="center")
 
-            self.ax.set_xticks(np.arange(len(self.arr)))
-            self.ax.set_xticklabels(self.xticks)
+            if self.xticks:
 
-            self.ax.set_yticks(np.arange(len(self.arr[0])))
-            self.ax.set_yticklabels(self.yticks)
+                self.ax.set_xticks(np.arange(len(self.arr)))
+                self.ax.set_xticklabels(self.xticks)
+
+            if self.yticks:
+
+                self.ax.set_yticks(np.arange(len(self.arr[0])))
+                self.ax.set_yticklabels(self.yticks)
 
         else:
             print("Array dimensions not supported.")
